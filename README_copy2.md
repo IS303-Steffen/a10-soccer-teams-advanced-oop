@@ -602,3 +602,305 @@ exit: End the program
 Enter an option: exiT
 Exiting the program.
 ```
+
+## Rubric
+This assignment contains the automated tests listed below. The tests will ignore spacing, capitalization, and punctuation, but you will fail the tests if you spell something wrong or calculate something incorrectly.
+
+After this table, see the Test Cases table below to see what inputs will be run for each of the tests below. To receive points for a test, the test must pass each of the individual test cases.
+
+<table border="1" style="width: 100%; text-align: center;">
+<thead style="text-align: center;">
+    <tr>
+        <th style="text-align: center;">Test</th>
+        <th style="text-align: center;">Test Cases Used </th>
+        <th style="text-align: center;">Description</th>
+        <th style="text-align: center;">Points</th>
+    </tr>
+</thead>
+<tbody>
+    <tr style="text-align: left">
+        <td>1. Printed Messages</td>
+        <td>1</td>
+        <td>
+        Your printed output must contain these phrases, but order doesn't matter. Some test cases won't produce all of these printed messages, so just check the test cases table below this if you fail during a specific test case. You will not be docked if you print out any extra statements not included here:
+        <ul>
+          <li><code>Charmander - Type: Fire - Hit Points: 55</code></li>
+          <li><code>Charmander has been healed to 70 hit points.</code></li>
+          <li><code>Charmander - Type: Fire - Hit Points: 70</code></li>
+          <li><code>Bulbasaur - Type: Grass - Hit Points: 60</code></li>
+          <li><code>Squirtle - Type: Water - Hit Points: 65</code></li>
+          <li><code>Generated attack value: &lt;number&gt;</code></li>
+        </ul>
+        Additionally, during each run of your code, exactly <code>3</code> of the following statements must run, no more or less:
+          <ul>
+            <li><code>Quick Attack (Type: Normal): 6 to 25 Attack Points</code></li>
+            <li><code>Tackle (Type: Normal): 5 to 20 Attack Points</code></li>
+            <li><code>Flamethrower (Type: Fire): 5 to 30 Attack Points</code></li>
+            <li><code>Ember (Type: Fire): 10 to 20 Attack Points</code></li>
+            <li><code>Hydro Pump (Type: Water): 20 to 25 Attack Points</code></li>
+            <li><code>Solar Beam (Type: Grass): 18 to 27 Attack Points</code></li>
+            <li><code>Slash (Type: Normal): 10 to 30 Attack Points</code></li>
+            <li><code>Vine Whip (Type: Grass): 10 to 25 Attack Points</code></li>
+            <li><code>Water Gun (Type: Water): 5 to 15 Attack Points</code></li>
+          </ul>        
+        </td>
+        <td>9</td>
+    </tr>
+    <tr>
+        <td>2. Pokemon Class</td>
+        <td>1</td>
+        <td style="text-align: left">
+          This test will create Pokemon objects using the arguments shown below. The object should contain the instance variables listed in the expected values column.
+          <table border="1">
+            <thead>
+                <tr>
+                    <th>initial arguments</th>
+                    <th>expected values</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>'Bulbasaur', 'Grass', 60</code></td>
+                    <td><code>'Bulbasaur': str, 'Grass': str, 60: (int, float)</code></td>
+                </tr>
+                <tr>
+                    <td><code>'Charmander', 'Fire', 55</code></td>
+                    <td><code>'Charmander': str, 'Fire': str, 55: (int, float)</code></td>
+                </tr>
+            </tbody>
+          </table>
+        </td>
+        <td>15</td>
+    </tr>
+    <tr>
+        <td>3. Move Class</td>
+        <td>1</td>
+        <td style="text-align: left">
+          This test will create Move objects using the arguments shown below. The object should contain the instance variables listed in the expected values column.
+          <table border="1">
+            <thead>
+                <tr>
+                    <th>initial arguments</th>
+                    <th>expected values</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>'Tackle', 'Normal', 5, 20</code></td>
+                    <td><code>'Tackle': str, 'Normal': str, 5: (int, float), 20: (int, float)</code></td>
+                </tr>
+                <tr>
+                    <td><code>'Water Gun', 'Water', 5, 15</code></td>
+                    <td><code>'Water Gun': str, 'Water': str, 5: (int, float), 15: (int, float)</code></td>
+                </tr>
+            </tbody>
+          </table>
+        </td>
+        <td>15</td>
+    </tr>
+      <tr>
+        <td>4. Pokemon - get info</td>
+        <td>1</td>
+        <td style="text-align: left">
+          This test will use the Pokemon objects created in test 2.
+          <table border="1">
+            <thead>
+                <tr>
+                    <th>arguments</th>
+                    <th>expected return value</th>
+                    <th>expected object update</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>self</code></td>
+                    <td><code>Bulbasaur - Type: Grass - Hit Points: 60</code></td>
+                    <td><code>None</code></td>
+                </tr>
+                <tr>
+                    <td><code>self</code></td>
+                    <td><code>Charmander - Type: Fire - Hit Points: 55</code></td>
+                    <td><code>None</code></td>
+                </tr>
+            </tbody>
+          </table>
+        </td>
+        <td>15</td>
+    </tr>
+          <tr>
+        <td>5. Pokemon - heal</td>
+        <td>1</td>
+        <td style="text-align: left">
+          This test will use the Pokemon objects created in test 2.
+          <table border="1">
+            <thead>
+                <tr>
+                    <th>arguments</th>
+                    <th>expected return value</th>
+                    <th>expected object update</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>self</code></td>
+                    <td><code>None</code></td>
+                    <td><code>'intial_value': 60, 'final_value': 75</code></td>
+                </tr>
+                <tr>
+                    <td><code>self</code></td>
+                    <td><code>None</code></td>
+                    <td><code>'intial_value': 55, 'final_value': 70</code></td>
+                </tr>
+            </tbody>
+          </table>
+        </td>
+        <td>15</td>
+    </tr>
+    <td>6. Move - get_info</td>
+        <td>1</td>
+        <td style="text-align: left">
+          This test will use the Move objects created in test 3.
+          <table border="1">
+            <thead>
+                <tr>
+                    <th>arguments</th>
+                    <th>expected return value</th>
+                    <th>expected object update</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>self</code></td>
+                    <td><code>Tackle (Type: Normal): 5 to 20 Attack Points</code></td>
+                    <td><code>None</code></td>
+                </tr>
+                <tr>
+                    <td><code>self</code></td>
+                    <td><code>Water Gun (Type: Water): 5 to 15 Attack Points</code></td>
+                    <td><code>None</code></td>
+                </tr>
+            </tbody>
+          </table>
+        </td>
+        <td>15</td>
+    </tr>
+       <td>7. Move - generate attack value</td>
+        <td>1</td>
+        <td style="text-align: left">
+          This test will use the Move objects created in test 3.
+          <table border="1">
+            <thead>
+                <tr>
+                    <th>arguments</th>
+                    <th>expected return value</th>
+                    <th>expected object update</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>self</code></td>
+                    <td><code>(5, 20)</code></td>
+                    <td><code>None</code></td>
+                </tr>
+                <tr>
+                    <td><code>self</code></td>
+                    <td><code>(5, 15)</code></td>
+                    <td><code>None</code></td>
+                </tr>
+            </tbody>
+          </table>
+        </td>
+        <td>15</td>
+    </tr>
+        <tr>
+        <td>8. Sufficient Comments</td>
+        <td>None</td>
+        <td style="text-align: left">Your code must include at least <code>10</code> comments. You can use any form of commenting:
+        <ul>
+          <li><code>#</code></li> 
+          <li><code>''' '''</code></li>
+          <li><code>""" """</code></li>
+        </ul>
+        </td>
+        <td>1</td>
+    </tr>
+    <tr>
+        <td colspan="3">Total Points</td>
+        <td>100</td>
+  </tr>
+</tbody>
+</table>
+
+<br><br>
+
+
+## Test Cases Summary
+<table>
+  <tr>
+    <th>Test Case Description</th>
+    <th>Inputs</th>
+  </tr>
+  <tr>
+    <td><a href="#testcase1">1: Default run</a></td>
+    <td><ul>
+  <li><code></code></li>
+</ul></td>
+  </tr>
+</table>
+
+<h3 id="testcase1">Test Case 1 Details - Default run</h3>
+
+<table>
+  <tr>
+    <th>Requirement</th>
+    <th>Components</th>
+  </tr>
+  <tr>
+    <td>Inputs</td>
+    <td><ul>
+  <li><code></code></li>
+</ul></td>
+  </tr>
+  <tr>
+    <td>Input Prompts</td>
+    <td><ul>
+  <li><code>Press enter to continue...</code></li>
+</ul></td>
+  </tr>
+
+  <tr>
+    <td>Printed Messages</td>
+    <td><ul>
+  <li><code>Flamethrower (Type: Fire): 5 to 30 Attack Points</code></li>
+  <li><code>Generated attack value: &lt;number&gt;</code></li>
+  <li><code>Tackle (Type: Normal): 5 to 20 Attack Points</code></li>
+  <li><code>Vine Whip (Type: Grass): 10 to 25 Attack Points</code></li>
+  <li><code>Solar Beam (Type: Grass): 18 to 27 Attack Points</code></li>
+  <li><code>Ember (Type: Fire): 10 to 20 Attack Points</code></li>
+  <li><code>Charmander - Type: Fire - Hit Points: 55</code></li>
+  <li><code>Charmander has been healed to 70 hit points.</code></li>
+  <li><code>Charmander - Type: Fire - Hit Points: 70</code></li>
+  <li><code>Bulbasaur - Type: Grass - Hit Points: 60</code></li>
+  <li><code>Squirtle - Type: Water - Hit Points: 65</code></li>
+</ul></td>
+  </tr>
+</table>
+
+<h4>Example Ouput:</h4>
+
+```
+Flamethrower (Type: Fire): 5 to 30 Attack Points
+Generated attack value: 21
+Tackle (Type: Normal): 5 to 20 Attack Points
+Generated attack value: 14
+Vine Whip (Type: Grass): 10 to 25 Attack Points
+Generated attack value: 11
+Press enter to continue...
+Charmander - Type: Fire - Hit Points: 55
+Charmander has been healed to 70 hit points.
+Charmander - Type: Fire - Hit Points: 70
+Bulbasaur - Type: Grass - Hit Points: 60
+Charmander - Type: Fire - Hit Points: 70
+Squirtle - Type: Water - Hit Points: 65
+```
+
