@@ -7,7 +7,7 @@ if they reference it as a parameter.
 import pytest, re, sys, os, json, traceback, pickle, inspect, multiprocessing, ast, importlib
 from io import StringIO
 from collections.abc import Iterable
-from tests.class_test_cases import test_cases_classes_dict
+from tests.test_cases.class_test_cases import test_cases_classes_dict
 
 
 # ================
@@ -15,8 +15,8 @@ from tests.class_test_cases import test_cases_classes_dict
 # ================
 
 # Enter the name of the file to be tested here, but leave out the .py file extention.
-solution_module = "a8_solution_pokemon_and_move_classes"
-student_module = "a8_pokemon_and_move_classes"
+solution_module = "a9_solution_soccer_teams_inheritance"
+student_module = "a9_soccer_teams_inheritance"
 
 def detect_module(solution_module, student_module):
     if os.path.exists(f"{solution_module}.py"):
@@ -47,7 +47,7 @@ CURRENT_DIR = os.path.dirname(__file__)
 # ========
 
 @pytest.fixture
-def test_cases():
+def input_test_cases():
     # Path to the final captured test cases JSON file
     captured_test_cases_file = os.path.join(CURRENT_DIR, 'test_cases_final.json')
     
@@ -58,7 +58,7 @@ def test_cases():
     return test_cases
 
 @pytest.fixture
-def test_cases_classes(): 
+def class_test_cases(): 
     return test_cases_classes_dict
 
 # =====

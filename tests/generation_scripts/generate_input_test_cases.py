@@ -13,9 +13,9 @@ import types
 import sys
 
 # Name of the file that will be run to generate the test cases from:
-solution_file_to_run = "a8_solution_pokemon_and_move_classes.py"
+solution_file_to_run = "a9_solution_soccer_teams_inheritance.py"
 # Name of the JSON file that is created after running the script:
-json_export_filename = 'test_cases_drafts.json'
+json_export_filename = r'./test_cases/input_test_cases_drafts.json'
 
 # List of data types to track
 tracked_data_types = [
