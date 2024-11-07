@@ -4,12 +4,12 @@ from conftest import load_student_code, format_error_message, exception_message_
 from collections.abc import Iterable
 import pytest
 
-def test_04_pokemon_get_info(test_cases, test_cases_classes):
+def test_05_pokemon_heal(test_cases, test_cases_classes):
     try:
         # Ensure test_cases is valid and iterable
         if not isinstance(test_cases, list):
             test_case = {"id_test_case": None}
-            exception_message_for_students(ValueError("test_cases should be a list of dictionaries. Contact your professor."), test_case=test_case) 
+            exception_message_for_students(ValueError("test_cases should be a list of dictionaries. Contact your professor."), input_test_case=test_case) 
             return  # Technically not needed, as exception_message_for_students throws a pytest.fail Error, but included for clarity that this ends the test.
 
         # Use the appropriate test case
@@ -18,7 +18,7 @@ def test_04_pokemon_get_info(test_cases, test_cases_classes):
 
         # Name of the class being tested:
         class_name = "Pokemon"
-        method_to_test = 'get_info'
+        method_to_test = 'heal'
         class_test_cases = {'class_name': class_name}
         class_test_cases['class_test_cases'] = test_cases_classes.get(class_name)
         class_test_cases['test_type'] = 'method_test'
@@ -31,7 +31,7 @@ def test_04_pokemon_get_info(test_cases, test_cases_classes):
         if queue_payload.get('class_results').get('CLASS ERROR') is not None:
             pytest.fail(f"{format_error_message(
                 custom_message=(f"{queue_payload.get('class_results').get('CLASS ERROR')}\n\n"), 
-                test_case=test_case,
+                input_test_case=test_case,
                 )}")
 
         class_results_list = queue_payload.get('class_results').get('class_test_cases')
@@ -64,9 +64,8 @@ def test_04_pokemon_get_info(test_cases, test_cases_classes):
                                     f"what the instructions say. If the message above says your function is returning \"None\" when it shouldn't, "
                                     f"that means your function likely doesn't have a return statement. Make sure you are returning "
                                     f"a value, not just printing it out directly in the function."),
-                    test_case=test_case,
+                    input_test_case=test_case,
                     )
-                
                 expected_object_updates_list = method_result.get('expected_object_update')
                 if expected_object_updates_list:
                     for expected_object_update in expected_object_updates_list:
@@ -90,10 +89,10 @@ def test_04_pokemon_get_info(test_cases, test_cases_classes):
                                             f"But no variables could be found that matched that value.\n\n"
                                             f"Make sure you are actually adding instance variables to the object by using \"self\". "
                                             f"Double check that you are following the logic provided in the instructions."),
-                            test_case=test_case,
+                            input_test_case=test_case,
                             )
                         
-                        actual_final_value = normalize_text(method_result.get('final_obj_state').get('instance_variables').get(student_var_name))
+                        actual_final_value = normalize_text(method_result.get('final_obj_state')[0].get('instance_variables').get(student_var_name))
 
                         assert actual_final_value == expected_final_value, format_error_message(
                             custom_message=(f"The method {method_to_test} is provided with the following argument(s) other than \"self\":\n\n"
@@ -107,7 +106,7 @@ def test_04_pokemon_get_info(test_cases, test_cases_classes):
                                             f"YOUR FINAL VALUE: {student_var_name}: {actual_final_value}\n\n"
                                             f"If your initial and final value are the same, make sure you are actually updating the object by changing an instance variable through \"self\". "
                                             f"Otherwise, double check that you are following the logic provided in the instructions."),
-                            test_case=test_case,
+                            input_test_case=test_case,
                             )
 
             # # check if each expected value is present in the class

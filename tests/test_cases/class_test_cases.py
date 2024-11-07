@@ -1,3 +1,9 @@
+from datetime import date, timedelta
+
+# ======================
+# METHOD TEST CASE CLASS
+# ======================
+
 class MethodTestCase:
     def __init__(self, function_name, args, expected_return_value, expected_object_update=None, num_calls=1):
         self.function_name = function_name
@@ -14,6 +20,10 @@ class MethodTestCase:
             "expected_object_update": self.expected_object_update,
             "num_calls": self.num_calls
         }
+    
+# ======================
+# CLASS TEST CASE CLASS
+# ======================
 
 class ClassTestCase:
     def __init__(self, class_name, init_args, init_expected_values, expected_function_names, method_test_cases):
@@ -43,103 +53,92 @@ class ClassTestCase:
             method_test_cases=method_test_cases
         )
     
+# ==============================
+# CREATE TEST CASE OBJECTS BELOW
+# ==============================
+'''
+MethodTestCase objects should be created first, then placed inside of ClassTestCase
+objects in their method_test_cases attribute
+'''
 
-# Creating MethodTestCase objects for the 'Pokemon' class test cases
-bulbasaur_get_info = MethodTestCase(
-    function_name='get_info',
-    args=[],
-    expected_return_value='Bulbasaur - Type: Grass - Hit Points: 60',
-    expected_object_update=None
-)
+# ========================
+# METHOD TEST CASE OBJECTS
+# ========================
 
-bulbasaur_heal = MethodTestCase(
-    function_name='heal',
-    args=[],
-    expected_return_value=None,
-    expected_object_update=[{'intial_value': 60, 'final_value': 75}]
-)
-
-charmander_get_info = MethodTestCase(
-    function_name='get_info',
-    args=[],
-    expected_return_value='Charmander - Type: Fire - Hit Points: 55',
-    expected_object_update=None
-)
-
-charmander_heal = MethodTestCase(
-    function_name='heal',
+# Creating MethodTestCase objects for the 'SoccerTeam' class test cases
+soccer_team_get_info = MethodTestCase(
+    function_name='record_win',
     args=[],
     expected_return_value=None,
-    expected_object_update=[{'intial_value': 55, 'final_value': 70}]
-)
-
-# Creating ClassTestCase objects for the 'Pokemon' class
-bulbasaur_test_case = ClassTestCase(
-    class_name='Pokemon',
-    init_args=['Bulbasaur', 'Grass', 60],
-    init_expected_values={'Bulbasaur': str, 'Grass': str, 60: (int, float)},
-    expected_function_names=['get_info', 'heal'],
-    method_test_cases=[bulbasaur_get_info, bulbasaur_heal]
-)
-
-charmander_test_case = ClassTestCase(
-    class_name='Pokemon',
-    init_args=['Charmander', 'Fire', 55],
-    init_expected_values={'Charmander': str, 'Fire': str, 55: (int, float)},
-    expected_function_names=['get_info', 'heal'],
-    method_test_cases=[charmander_get_info, charmander_heal]
-)
-
-# Creating MethodTestCase objects for the 'Move' class (these have no method test cases defined in your data)
-# You can leave these empty, or define them later as needed
-
-tackle_get_info = MethodTestCase(
-    function_name='get_info',
-    args=[],
-    expected_return_value='Tackle (Type: Normal): 5 to 20 Attack Points',
     expected_object_update=None
 )
 
-water_gun_get_info = MethodTestCase(
-    function_name='get_info',
-    args=[],
-    expected_return_value='Water Gun (Type: Water): 5 to 15 Attack Points',
-    expected_object_update=None   
+
+
+# =======================
+# CLASS TEST CASE OBJECTS
+# =======================
+
+UVU_soccer_team = ClassTestCase(
+    class_name='SoccerTeam',
+    init_args={
+        'team_number': 1,
+        'team_name': 'UVU',
+    },
+    init_expected_values={
+        'team_number': 1,
+        'team_name': 'UVU',
+        '_SoccerTeam__wins': 0,
+        '_SoccerTeam__losses': 0,
+        'goals_scored': 0,
+        'goals_allowed': 0
+    },
+    expected_function_names=['record_win', 'record_loss', 'get_record_percentage', 'get_team_info', 'generate_score', 'get_season_message'],
+    method_test_cases=[]
 )
 
-tackle_generate_attack_value = MethodTestCase(
-    function_name='generate_attack_value',
-    args=[],
-    expected_return_value=(5, 20),
-    expected_object_update=None,
-    num_calls=100   
+BYU_sponsored_team = ClassTestCase(
+    class_name='SponsoredTeam',
+    init_args={
+        'team_number': 2,
+        'team_name': 'BYU',
+        'sponsor_name': 'Cosmo'
+    },
+    init_expected_values={
+        'team_number': 2,
+        'team_name': 'BYU',
+        'sponsor_name': 'Cosmo',
+        '_SoccerTeam__wins': 0,
+        '_SoccerTeam__losses': 0,
+        'goals_scored': 0,
+        'goals_allowed': 0
+    },
+    expected_function_names=['record_win', 'record_loss', 'get_record_percentage', 'get_team_info', 'generate_score', 'get_season_message'],
+    method_test_cases=[]
 )
 
-water_gun_generate_attack_value = MethodTestCase(
-    function_name='generate_attack_value',
-    args=[],
-    expected_return_value=(5, 15),
-    expected_object_update=None,
-    num_calls=100   
+game_1 = ClassTestCase(
+    class_name='Game',
+    init_args={
+        'game_number': 1,
+        'home_team': {'class_name': 'SoccerTeam', 'init_args': [1, 'UVU']},
+        'away_team': {'class_name': 'SponsoredTeam', 'init_args': [2, 'BYU', 'Cosmo']}
+    },
+    init_expected_values={
+        'game_number': 1,
+        'game_date': date.today() + timedelta(days=1),
+        'home_team': {'team_number': 1, 'team_name': 'UVU', '_SoccerTeam__wins': 0, '_SoccerTeam__losses': 0, 'goals_scored': 0, 'goals_allowed': 0},
+        'away_team': {'team_number': 2, 'team_name': 'BYU', 'sponsor_name': 'Cosmo', '_SoccerTeam__wins': 0, '_SoccerTeam__losses': 0, 'goals_scored': 0, 'goals_allowed': 0},
+        'home_team_score': 0,
+        'away_team_score': 0
+    },
+    expected_function_names=['simulate', 'get_winner', 'get_loser', 'update_records'],
+    method_test_cases=[]
 )
 
-tackle_test_case = ClassTestCase(
-    class_name='Move',
-    init_args=['Tackle', 'Normal', 5, 20],
-    init_expected_values={'Tackle': str, 'Normal': str, 5: (int, float), 20: (int, float)},
-    expected_function_names=['get_info', 'generate_attack_value'],
-    method_test_cases=[tackle_get_info, tackle_generate_attack_value]
-)
+# Update the list of test cases
+test_cases_classes_list = [UVU_soccer_team, BYU_sponsored_team, game_1]
 
-water_gun_test_case = ClassTestCase(
-    class_name='Move',
-    init_args=['Water Gun', 'Water', 5, 15],
-    init_expected_values={'Water Gun': str, 'Water': str, 5: (int, float), 15: (int, float)},
-    expected_function_names=['get_info', 'generate_attack_value'],
-    method_test_cases=[water_gun_get_info, water_gun_generate_attack_value]
-)
-
-test_cases_classes_list = [bulbasaur_test_case, charmander_test_case, tackle_test_case, water_gun_test_case]
 test_cases_classes_list = [class_test_case.to_dict() for class_test_case in test_cases_classes_list]
 unique_class_names = {class_name.get('class_name') for class_name in test_cases_classes_list}
 
