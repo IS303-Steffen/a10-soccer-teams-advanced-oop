@@ -149,11 +149,14 @@ def load_student_code(current_test_name, inputs, input_test_case=None, module_to
     except Exception as e:
         exception_message_for_students(e, input_test_case, current_test_name)
 
-
 def _load_student_code_subprocess(shared_data, current_test_name, inputs, input_test_case, module_to_test, function_tests, class_tests):
     """
     Executes the student's code in a subprocess, capturing inputs, outputs, exceptions, and testing functions/classes.
     """
+    # Define a custom exception for exit handling
+    class ExitCalled(Exception):
+        pass
+
     try:
         # Prepare the mocked input function and capture variables
         manager_payload = {}
@@ -180,6 +183,11 @@ def _load_student_code_subprocess(shared_data, current_test_name, inputs, input_
             'input': mock_input,     # Overrides input() in the student's code
         }
 
+        # Override exit and sys.exit to prevent termination
+        import builtins, sys
+        builtins.exit = lambda *args: (_ for _ in ()).throw(ExitCalled("exit() called"))
+        sys.exit = lambda *args: (_ for _ in ()).throw(ExitCalled("sys.exit() called"))
+
         # Prepare to capture 'main' function's locals
         main_locals = {}
 
@@ -205,7 +213,10 @@ def _load_student_code_subprocess(shared_data, current_test_name, inputs, input_
         sys.stdout = StringIO()
 
         # Execute the student's code within the controlled namespace
-        exec(code, globals_dict)
+        try:
+            exec(code, globals_dict)
+        except ExitCalled as e:
+            print(f"Exit call intercepted: {e}")  # Log or handle exit calls
 
         # Remove the trace function
         sys.settrace(None)
@@ -278,7 +289,7 @@ def _load_student_code_subprocess(shared_data, current_test_name, inputs, input_
         shared_data['status'] = 'exception'
         shared_data['payload'] = exception_data
 
-    except BaseException as e:
+    except Exception as e:
         # Send the exception back as a dictionary
         exc_type, exc_value, exc_tb = sys.exc_info()
         exception_data = {
@@ -293,7 +304,6 @@ def _load_student_code_subprocess(shared_data, current_test_name, inputs, input_
         sys.settrace(None)
         if 'old_stdout' in globals() or 'old_stdout' in locals():
             sys.stdout = old_stdout
-
 
 def is_picklable(obj):
     """
