@@ -32,7 +32,7 @@ def detect_module(solution_module, student_module):
 default_module_to_test = detect_module(solution_module, student_module)
 
 # default per-test-case timeout amount in seconds:
-default_timeout_seconds = 6000
+default_timeout_seconds = 7
 
 # default decimal place to round to for regex comparisons
 # helpful for accounting for different rounding methods students could use.
@@ -227,10 +227,6 @@ def _load_student_code_subprocess(shared_data, current_test_name, inputs, input_
             class_results = test_classes(class_tests, globals_dict)
         else:
             class_results = {"No classes tested": "No classes tested"}
-
-        # TESTING ZONE####
-        #del class_results['class_test_cases'][0]['init_args']
-        #del class_results['class_test_cases'][0]['actual_object']
 
         # Collect global variables from the student's code
         module_globals = {k: v for k, v in globals_dict.items() if is_picklable(v)}
@@ -520,7 +516,13 @@ def test_functions(function_tests, globals_dict, instance=None):
     is_method_test = False
 
     if not function_tests:
-        function_results["FUNCTION ERROR"] = "No functions were provided to function_tests. Contact your professor."
+        exception_data = {
+            'type': 'Missing function tests',
+            'message': (f"No function tests were provided to test_functions function in conftest.py. Contact your professor."),
+            'custom_location': f'test_functions in conftest.py',
+            'detail': 'FUNCTION ERROR'
+        }
+        function_results["FUNCTION ERROR"] = exception_data
         return function_results
 
     if instance is not None:
@@ -554,12 +556,17 @@ def test_functions(function_tests, globals_dict, instance=None):
                 break
 
         if not func_found:
-            function_results["FUNCTION ERROR"] = (
-                f"This test is looking specifically for the function/method '{func_name_original}' in {context},\n"
-                f"But it couldn't find it, nor any of its accepted variations:\n{', '.join(function_variations[1:])}\n\n"
-                f"Make sure you are spelling the function/method name correctly. Below are all of "
-                f"the functions/methods that the test could find in {context}:\n{all_functions_names}"
-            )
+            exception_data = {
+                    'type': 'Function not found',
+                    'message': (f"This test is looking specifically for the function/method '{func_name_original}' in {context},\n"
+                                f"But it couldn't find it, nor any of its accepted variations:\n{', '.join(function_variations[1:])}\n\n"
+                                f"Make sure you are spelling the function/method name correctly, and that you didn't name any other variables "
+                                f"in your code the exact same name as the function. Below are all of "
+                                f"the functions/methods that the test could find in {context}:\n{all_functions_names}"),
+                    'custom_location': f'test_classes in conftest.py',
+                    'detail': 'CLASS ERROR'
+            }
+            function_results['FUNCTION ERROR'] = exception_data
             return function_results
 
 
@@ -573,6 +580,9 @@ def test_functions(function_tests, globals_dict, instance=None):
                 for _ in range(num_calls): # usually just called once, but some tests require several calls
                     if is_method_test:
                     # first store the initial state of the object:
+                        values_to_set = test_case.get('set_var_values')
+                        if values_to_set:
+                            update_object_from_dict(instance, values_to_set)
                         object_state = get_object_state(instance)
                         test_case.setdefault('initial_obj_state', []).append(object_state)
 
@@ -585,12 +595,52 @@ def test_functions(function_tests, globals_dict, instance=None):
                         test_case.setdefault('final_obj_state', []).append(object_state)
 
             except Exception as e:
-                test_case["FUNCTION ERROR"] = f"While trying to run {func_name_original}, with these argument: {args} this error occured: {type(e).__name__}: {e}"
+                if len(args) > 0:
+                    init_args_str = '\n'.join([f"{index}: {argument}" for index, argument in enumerate(args, start=1)])
+                elif instance:
+                    init_args_str = 'None besides "self"'
+                else:
+                    init_args_str = "No arguments"
+                exception_data = {
+                    'type': type(e).__name__,
+                    'message': (f"{type(e).__name__}: {e}\n\n"
+                                f"Your code gave the above error while trying to run {func_name_original}, with these arguments:\n\n"
+                                f"{func_name_original.upper()} ARGUMENTS:\n"
+                                f"{'-'*len(f"{func_name_original.upper()} ARGUMENTS:")}\n"
+                                f"{init_args_str}\n\n"
+                                f"Make sure your function is accepting the correct number of arguments, you may have written the function with "
+                                f"more or fewer parameters than the test is expecting. Also double check that your function doesn't run into a "
+                                f"runtime error when providing it with the exact arguments shown above."),
+                    'custom_location': f'Your {func_name_original} function',
+                    'detail': 'FUNCTION ERROR'
+                }
+                test_case["FUNCTION ERROR"] = exception_data
+                return function_results
         else:
-            test_case["FUNCTION ERROR"] = f"{func_name_original} was found in {context}, but it isn't callable as a function. Make sure you defined it correctly."
+            exception_data = {
+                    'type': 'Function name isn\'t callable',
+                    'message': (f"{func_name_original} was found in {context}, but it isn't callable as a function. Make sure you defined it correctly, "
+                                f"and that you aren't using the exact name of the function as a variable name somewhere else in your code."),
+                    'custom_location': f'test_classes in conftest.py',
+                    'detail': 'FUNCTION ERROR'
+                }
+            test_case["FUNCTION ERROR"] = exception_data
             return function_results
 
     return function_results
+
+def update_object_from_dict(obj, update_dict):
+    for key, value in update_dict.items():
+        # Create patterns to match snake_case, PascalCase, and camelCase
+        snake_case_key = key
+        pascal_case_key = ''.join(word.capitalize() for word in key.split('_'))
+        camel_case_key = pascal_case_key[0].lower() + pascal_case_key[1:]
+        
+        # Find and set the attribute if it exists in any naming style
+        for attr_key in [snake_case_key, pascal_case_key, camel_case_key]:
+            if hasattr(obj, attr_key):
+                setattr(obj, attr_key, value)
+                break
 
 def get_all_custom_classes(globals_dict):
     """
@@ -733,6 +783,7 @@ def test_classes(class_tests, globals_dict):
                 method_test_cases = [method_test_case for method_test_case in class_test.get('method_test_cases') if method_test_case.get('function_name') == method_to_test]
 
                 test_functions(method_test_cases, globals_dict, instance=obj)
+                pass
                     
         except Exception as e:
             exc_type, exc_value, exc_tb = sys.exc_info()
@@ -752,13 +803,29 @@ def get_object_state(obj):
     """
     Returns a dictionary representing the object's state,
     including class name, instance variables, and methods.
+    Recursively serializes any nested objects stored as instance variables.
     """
-    # Get instance variables
-    instance_variables = {name: value for name, value in vars(obj).items()
-                          if is_picklable(value)}
+    def serialize(value):
+        if is_picklable(value):
+            return value  # Directly picklable objects are returned as-is
+        elif hasattr(value, '__dict__'):  # If value is a custom object, recurse
+            return get_object_state(value)
+        elif isinstance(value, list):  # Handle lists of objects
+            return [serialize(item) for item in value]
+        elif isinstance(value, dict):  # Handle dictionaries of objects
+            return {k: serialize(v) for k, v in value.items()}
+        elif isinstance(value, tuple):  # Handle tuples of objects
+            return tuple(serialize(item) for item in value)
+        else:
+            return str(value)  # Fallback to string representation if unpicklable
+
+    # Get instance variables and recursively serialize them
+    instance_variables = {name: serialize(value) for name, value in vars(obj).items()}
+
     # Get methods
     methods = [name for name, value in inspect.getmembers(obj, predicate=inspect.ismethod)
                if not name.startswith('__')]
+
     return {
         'class_name': obj.__class__.__name__,
         'instance_variables': instance_variables,
@@ -787,7 +854,7 @@ def format_error_message(custom_message: str = None,
     Keep line_length at 74, that is where pytest splits lines in its error
     reporting
     """
-    {input_test_case["id_input_test_case"]}
+    
     # some starting strings. All messages will be appended to error_message
     error_message = ''
     divider = f"\n{"-"*line_length}\n"
@@ -912,7 +979,7 @@ def exception_message_for_students(exception_data, input_test_case, current_test
     else:
         display_inputs_option = False
 
-    if error_type == "StopIteration" or error_detail == "CLASS ERROR":
+    if error_type == "StopIteration" or error_detail in ["CLASS ERROR", "FUNCTION ERROR"]:
         pytest.fail(f"{format_error_message(
             custom_message=(f"While trying to run {current_test_name}, python ran into an error.\n\n"
                             f"LOCATION OF ERROR:\n"
@@ -1094,18 +1161,34 @@ def convert_pascal_case(pascal_str):
 
     return [pascal_str, camel_case, snake_case]
 
-def prettify_dictionary(dictionary):
+# def prettify_dictionary(dictionary):
+#     if not isinstance(dictionary, dict):
+#         return dictionary
+    
+#     formatted_dict_str = ''
+#     for key, value in dictionary.items():
+#         formatted_dict_str += f'{key}: {value}\n'
+    
+#     # return it without the last newline
+#     return formatted_dict_str[:-1]
+
+def prettify_dictionary(dictionary, indent_level=0):
     if not isinstance(dictionary, dict):
-        return dictionary
+        return str(dictionary)
     
     formatted_dict_str = ''
-    for key, value in dictionary.items():
-        formatted_dict_str += f'{key}: {value}\n'
+    indent = '-    ' * indent_level  # 4 spaces per indentation level
     
-    # return it without the last newline
-    return formatted_dict_str[:-1]
-
-
+    for key, value in dictionary.items():
+        formatted_dict_str += f'{indent}{key}: '
+        if isinstance(value, dict):
+            # Recursively format nested dictionaries with increased indentation
+            formatted_dict_str += '\n' + prettify_dictionary(value, indent_level + 1) + '\n'
+        else:
+            formatted_dict_str += f'{value}\n'
+    
+    # Return without the last newline
+    return formatted_dict_str.rstrip()
 
 def get_similarity_feedback(normalized_expected_phrase, normalized_captured_strings_list, similarity_threshold=0.7):
     """

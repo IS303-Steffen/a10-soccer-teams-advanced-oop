@@ -1,4 +1,4 @@
-max_score = 15  # This value is pulled by yml_generator.py to assign a score to this test.
+max_score = 10  # This value is pulled by yml_generator.py to assign a score to this test.
 from conftest import load_student_code, format_error_message, exception_message_for_students, normalize_text, prettify_dictionary
 #from test_cases_classes_final import class_test_cases
 from collections.abc import Iterable
@@ -99,6 +99,7 @@ def test_04_sponsored_team_class(current_test_name, input_test_cases, class_test
                                     f"YOUR ACTUAL OBJECT:\n"
                                     f"---------------\n"
                                     f"{actual_obj_values_normalized}\n\n"),
+                    current_test_name=current_test_name,
                     input_test_case=input_test_case,
                 )
         
