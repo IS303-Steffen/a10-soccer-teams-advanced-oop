@@ -4,7 +4,7 @@ any @pytest.fixture created here is available to any other test file
 if they reference it as a parameter.
 '''
 
-import pytest, re, sys, os, json, traceback, pickle, inspect, multiprocessing, ast, importlib, difflib, copy
+import pytest, re, sys, os, json, traceback, pickle, inspect, multiprocessing, ast, importlib, difflib, copy, builtins
 from io import StringIO
 from collections.abc import Iterable
 from tests.test_cases.class_test_cases import test_cases_classes_dict
@@ -184,7 +184,6 @@ def _load_student_code_subprocess(shared_data, current_test_name, inputs, input_
         }
 
         # Override exit and sys.exit to prevent termination
-        import builtins, sys
         builtins.exit = lambda *args: (_ for _ in ()).throw(ExitCalled("exit() called"))
         sys.exit = lambda *args: (_ for _ in ()).throw(ExitCalled("sys.exit() called"))
 
@@ -239,11 +238,11 @@ def _load_student_code_subprocess(shared_data, current_test_name, inputs, input_
         else:
             class_results = {"No classes tested": "No classes tested"}
 
-        # Collect global variables from the student's code
-        module_globals = {k: v for k, v in globals_dict.items() if is_picklable(v)}
+        # Collect global variables from the student's code and make them picklable
+        module_globals = {k: serialize_object(v) for k, v in globals_dict.items() if is_picklable(v)}
 
-        # Add main_locals to module_globals under a special key
-        module_globals['__main_locals__'] = main_locals
+        # Add main_locals to module_globals under a special key, ensuring picklability
+        module_globals['__main_locals__'] = serialize_object(main_locals)
         
         # add each payload into a dictionary:
         manager_payload['captured_input_prompts'] = captured_input_prompts
