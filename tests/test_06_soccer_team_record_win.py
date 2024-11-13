@@ -34,6 +34,12 @@ def test_06_soccer_team_record_win(current_test_name, input_test_cases, class_te
                 input_test_case=input_test_case,
                 current_test_name=current_test_name,
                 )}")
+        elif manager_payload.get('class_results').get('FUNCTION ERROR') is not None:
+            pytest.fail(f"{exception_message_for_students(
+                exception_data=manager_payload.get('class_results').get('FUNCTION ERROR').get('FUNCTION ERROR'), 
+                input_test_case=input_test_case,
+                current_test_name=current_test_name,
+                )}")
 
         class_results_list = manager_payload.get('class_results').get('class_test_cases')
 

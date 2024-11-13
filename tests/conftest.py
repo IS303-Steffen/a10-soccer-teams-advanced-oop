@@ -615,7 +615,7 @@ def test_functions(function_tests, globals_dict, instance=None):
                     'message': (f"{type(e).__name__}: {e}\n\n"
                                 f"Your code gave the above error while trying to run {func_name_original}, with these arguments:\n\n"
                                 f"{func_name_original.upper()} ARGUMENTS:\n"
-                                f"{'-'*len(f"{func_name_original.upper()} ARGUMENTS:")}\n"
+                                f"{'-'*len(f'{func_name_original.upper()} ARGUMENTS:')}\n"
                                 f"{init_args_str}\n\n"
                                 f"Make sure your function is accepting the correct number of arguments, you may have written the function with "
                                 f"more or fewer parameters than the test is expecting. Also double check that your function doesn't run into a "
@@ -769,7 +769,7 @@ def test_classes(class_tests, globals_dict):
                                 f"was expecting. If so, change your {class_name_original} constructor to where it can work with the arguments shown below. "
                                 f"This test is calling the constructor of {class_name_original} with the following arguments:\n\n"
                                 f"EXPECTED {class_name_original.upper()} INIT ARGUMENTS:\n"
-                                f"{'-'*len(f"EXPECTED {class_name_original.upper()} INIT ARGUMENTS:")}\n"
+                                f"{'-'*len(f'EXPECTED {class_name_original.upper()} INIT ARGUMENTS:')}\n"
                                 f"{init_args_str}"),
                     'custom_location': f'The __init__ method of your {class_name_original} class',
                     'detail': 'CLASS ERROR'
@@ -791,7 +791,9 @@ def test_classes(class_tests, globals_dict):
                 method_to_test = class_tests.get('method_to_test')
                 method_test_cases = [method_test_case for method_test_case in class_test.get('method_test_cases') if method_test_case.get('function_name') == method_to_test]
 
-                test_functions(method_test_cases, globals_dict, instance=obj)
+                function_results = test_functions(method_test_cases, globals_dict, instance=obj)
+                if function_results:
+                    class_tests["FUNCTION ERROR"] = function_results
                 pass
                     
         except Exception as e:
