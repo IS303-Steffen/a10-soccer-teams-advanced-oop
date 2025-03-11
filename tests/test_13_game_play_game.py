@@ -29,17 +29,19 @@ def test_13_game_play_game(current_test_name, input_test_cases, class_test_cases
 
         # first check if there was an error trying to run the code
         if manager_payload.get('class_results').get('CLASS ERROR') is not None:
-            pytest.fail(f"{exception_message_for_students(
-                exception_data=manager_payload.get('class_results').get('CLASS ERROR'), 
-                input_test_case=input_test_case,
-                current_test_name=current_test_name,
-                )}")
+            custom_message = f"{manager_payload.get('class_results').get('CLASS ERROR').get('message')}\n\n"
+            formatted_message = format_error_message(
+                                    custom_message=custom_message, 
+                                    input_test_case=input_test_case,
+                                    current_test_name=current_test_name)
+            pytest.fail(formatted_message)
+
         elif manager_payload.get('class_results').get('FUNCTION ERROR') is not None:
-            pytest.fail(f"{exception_message_for_students(
-                exception_data=manager_payload.get('class_results').get('FUNCTION ERROR').get('FUNCTION ERROR'), 
+            exception_message_for_students(
+                exception_data=manager_payload.get('class_results').get('FUNCTION ERROR').get("FUNCTION ERROR"),
                 input_test_case=input_test_case,
                 current_test_name=current_test_name,
-                )}")
+                )
 
         class_results_list = manager_payload.get('class_results').get('class_test_cases')
 
@@ -50,16 +52,18 @@ def test_13_game_play_game(current_test_name, input_test_cases, class_test_cases
             method_results_list = [method_result for method_result in class_result.get('method_test_cases') if method_result.get('function_name') == method_to_test]
             
             if not method_results_list:
-                pytest.fail(f"{exception_message_for_students(ValueError("No method test cases were found. Contact your professor."), input_test_case, current_test_name)}")
+                exception_message = exception_message_for_students(ValueError("No method test cases were found. Contact your professor."), input_test_case, current_test_name)
+                pytest.fail(exception_message)
 
             for method_result in method_results_list:
                 # first check if there were any function errors when running the method:
                 if method_result.get('FUNCTION ERROR') is not None:
-                    pytest.fail(f"{exception_message_for_students(
-                        exception_data=method_result.get('FUNCTION ERROR'), 
-                        input_test_case=input_test_case,
-                        current_test_name=current_test_name,
-                        )}")
+                    exception_message = exception_message_for_students(
+                                            exception_data=method_result.get('FUNCTION ERROR'), 
+                                            input_test_case=input_test_case,
+                                            current_test_name=current_test_name,
+                                            )
+                    pytest.fail(exception_message)
                     
                 # I want to go through each variable that needsto be updated and check if it was updated for each home and away team.
                 initial_game = method_result.get('initial_obj_state')[0].get('instance_variables')
@@ -104,94 +108,16 @@ def test_13_game_play_game(current_test_name, input_test_cases, class_test_cases
                                     f"Below are the starting values in the Game class, followed by the values after {method_to_test} "
                                     f"is run. Make sure the after values are all being updated as they should to be according to the instructions."
                                     f"BEFORE RUNNING {method_to_test.upper()}:\n"
-                                    f"{"-"*len(f"BEFORE RUNNING {method_to_test.upper()}:")}\n"
+                                    f"{'-'*len(f'BEFORE RUNNING {method_to_test.upper()}:')}\n"
                                     f"{inital_game_str}\n\n"
                                     f"AFTER RUNNING {method_to_test.upper()}:\n"
-                                    f"{"-"*len(f"AFTER RUNNING {method_to_test.upper()}:")}\n"
+                                    f"{'-'*len(f'AFTER RUNNING {method_to_test.upper()}:')}\n"
                                     f"{final_game_str}\n\n"
                                     f"Make sure all the necessary variables are being updated, either in the Game's score, or the nested "
                                     f"soccer team objects."),
                     current_test_name=current_test_name,
                     input_test_case=input_test_case,
                     )
-
-
-                # initial_value_found = False
-                # student_var_name = None
-                # normalized_expected_name = normalize_text(expected_update_variable_name)
-                # normalized_expected_initial_value = normalize_text(expected_update_values.get('initial_value'))
-                # normalized_expected_final_value = normalize_text(expected_update_values.get('final_value'))
-
-                # initial_obj_state_vars = method_result.get('initial_obj_state')[run_index].get('instance_variables')
-                # initial_state_vars_str = '\n'.join([f"{normalize_text(name)}: {normalize_text(value)}" for name, value in initial_obj_state_vars.items()])
-                # for actual_var_name, initial_var_value in initial_obj_state_vars.items():
-                #     # check the var names:
-                #     normalized_actual_var_name = normalize_text(actual_var_name)
-                #     expected_name_match = normalized_actual_var_name == normalized_expected_name
-
-                #     # check the var values:
-                #     normalized_actual_initial_var_value = normalize_text(initial_var_value)
-                #     exepcted_value_match = normalized_actual_initial_var_value == normalized_expected_initial_value
-
-                #     if expected_name_match and exepcted_value_match:
-                #         initial_value_found = True
-                #         student_var_name = actual_var_name
-                #         normalized_student_var_name = normalize_text(student_var_name)
-                #         break
-                
-                # for original, replacement in [('soccerteam', '__'), ('sponsoredteam', '__')]:
-                #     normalized_expected_name = normalized_expected_name.replace(original, replacement)
-                #     initial_state_vars_str= initial_state_vars_str.replace(original, replacement)
-                # assert initial_value_found, format_error_message(
-                #     custom_message=(f"The method \"{method_to_test}\" is provided with the following argument(s) other than \"self\":\n\n"
-                #                     f"METHOD ARGUMENTS:\n"
-                #                     f"-----------------\n"
-                #                     f"{test_inputs_str}\n\n"
-                #                     f"The {class_name} object is expected to start out with the following variable and value (ignoring capitalization / punctuation):\n\n"
-                #                     f"EXPECTED INITIAL VALUE:\n"
-                #                     f"-----------------------\n"
-                #                     f"{normalized_expected_name}: {normalized_expected_initial_value}\n\n"
-                #                     f"But no variables could be found that matched that name.\n\n"
-                #                     f"Make sure you are actually adding instance variables to the object by using \"self\". "
-                #                     f"Double check that you are following the logic provided in the instructions.\n\n"
-                #                     f"Here are all the variables the test could find in your {class_name} object (ignoring capitalization / punctuation):\n\n"
-                #                     f"YOUR VARIABLES IN {class_name.upper()}:\n"
-                #                     f"{"-"*len("YOUR VARIABLES IN " + class_name + ":")}\n"
-                #                     f"{initial_state_vars_str}"),
-                #     current_test_name=current_test_name,
-                #     input_test_case=input_test_case,
-                #     )
-                
-                # normalized_actual_final_value = normalize_text(method_result.get('final_obj_state')[run_index].get('instance_variables').get(student_var_name))
-                
-                # for original, replacement in [('soccerteam', '__'), ('sponsoredteam', '__')]:
-                #     normalized_student_var_name = normalized_student_var_name.replace(original,replacement)
-
-                # assert normalized_actual_final_value == normalized_expected_final_value, format_error_message(
-                #     custom_message=(f"The method {method_to_test} is provided with the following argument(s) other than \"self\":\n\n"
-                #                     f"METHOD ARGUMENTS:\n"
-                #                     f"-----------------\n"
-                #                     f"{test_inputs_str}\n\n"
-                #                     f"It is expected to update the {class_name} object in the following way (ignoring capitalization / punctuation):\n\n"
-                #                     f"EXPECTED INITIAL VALUE:\n"
-                #                     f"-----------------------\n"
-                #                     f"{normalized_expected_name}: {normalized_expected_initial_value}\n\n"
-                #                     f"SHOULD BECOME EXPECTED FINAL VALUE:\n"
-                #                     f"-----------------------------------\n"
-                #                     f"{normalized_expected_name}: {normalized_expected_final_value}\n\n"
-                #                     f"In your {class_name} object, this was your initial value:\n\n"
-                #                     f"YOUR INITIAL VALUE:\n"
-                #                     f"-------------------\n"
-                #                     f"{normalized_student_var_name}: {normalized_actual_initial_var_value}\n\n"
-                #                     f"But the final value of {normalized_student_var_name} after calling the method {method_to_test} was:\n\n"
-                #                     f"YOUR FINAL VALUE:\n"
-                #                     f"-----------------\n"
-                #                     f"{normalized_student_var_name}: {normalized_actual_final_value}\n\n"
-                #                     f"If your initial and final value are the same, make sure you are actually updating the object by changing an instance variable through \"self\". "
-                #                     f"Otherwise, double check that you are following the logic provided in the instructions."),
-                #     current_test_name=current_test_name,
-                #     input_test_case=input_test_case,
-                #     )        
     
     except AssertionError:
         raise

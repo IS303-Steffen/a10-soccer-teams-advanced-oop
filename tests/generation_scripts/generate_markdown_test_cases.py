@@ -1,142 +1,40 @@
 import json
+import os
 
-imported_json_file_path = 'tests/test_cases/input_test_cases_final.json'
-exported_md_file_path = 'tests/generation_scripts/markdown_generated.md'
+# Load the JSON data
+json_file = 'tests/test_cases/input_test_cases_final.json'
+output_folder = "tests/generation_scripts"
+output_file = 'markdown_generated.md'
 
-# Global variable to specify any additional keys to include in the detailed test case tables
-ADDITIONAL_KEYS = []  # For example, 'dicts' key in the JSON
+# Ensure the output folder exists
+os.makedirs(output_folder, exist_ok=True)
 
-# Read the JSON file
-with open(imported_json_file_path, 'r') as f:
-    test_cases = json.load(f)
+# Load the JSON content
+with open(json_file, "r") as file:
+    test_cases = json.load(file)
 
-# Collect all unique input_prompts and printed_messages across all test cases
-input_prompts_set = set()
-printed_messages_set = set()
+# Start the Markdown content
+markdown_content = """## Test Cases
+If you fail a test during a specific test case, see the `descriptions_of_test_cases` folder for the following:
+<table border="1" style="width: 100%; text-align: left;">
+  <tr>
+    <th>Test Case</th>
+    <th>Description</th>
+  </tr>
+"""
 
-for test_case in test_cases:
-    input_prompts_set.update(test_case.get('input_prompts', []))
-    printed_messages_set.update(test_case.get('printed_messages', []))
+# Add rows for each test case
+for idx, test_case in enumerate(test_cases, start=1):
+    test_id = f"Input Test Case {idx:02d}"
+    description = test_case.get("input_test_case_description", "No description available.")
+    markdown_content += f"  <tr>\n    <td>{test_id}</td>\n    <td>{description}</td>\n  </tr>\n"
 
-# Start building the markdown output
-output = ""
+# Close the table
+markdown_content += "</table>"
 
-# All Possible Input Prompts
-output += "### All Possible Input Prompts:\n"
-for prompt in sorted(input_prompts_set):
-    output += f"- `{prompt}`\n"
-output += "\n"
+# Write the Markdown content to the file
+output_path = os.path.join(output_folder, output_file)
+with open(output_path, "w") as md_file:
+    md_file.write(markdown_content)
 
-# All Possible Printed Messages
-output += "### All Possible Printed Messages:\n"
-for message in sorted(printed_messages_set):
-    # Remove leading/trailing whitespace and newlines
-    message = message.strip()
-    output += f"- `{message}`\n"
-output += "\n"
-
-# Test Cases Summary
-output += "## Input Test Cases Summary\n"
-output += '<table>\n'
-output += '  <tr>\n'
-output += '    <th>Input Test Case Description</th>\n'
-output += '    <th>Inputs</th>\n'
-output += '  </tr>\n'
-
-for test_case in test_cases:
-    id_test_case = test_case.get('id_input_test_case')
-    test_case_description = test_case.get('input_test_case_description')
-    inputs = test_case.get('inputs', [])
-
-    # First cell: id_test_case: test_case_description with anchor link
-    anchor_id = f"inputtestcase{id_test_case}"
-    description_cell = f'<a href="#{anchor_id}">{id_test_case}: {test_case_description}</a>'
-
-    # Second cell: inputs as unordered list, with each input wrapped in <code></code>
-    inputs_cell = '<ul>\n'
-    for inp in inputs:
-        inputs_cell += f'  <li><code>{inp}</code></li>\n'
-    inputs_cell += '</ul>'
-
-    # Add row to the table
-    output += '  <tr>\n'
-    output += f'    <td>{description_cell}</td>\n'
-    output += f'    <td>{inputs_cell}</td>\n'
-    output += '  </tr>\n'
-
-output += '</table>\n\n'
-
-# Define the keys to include in the detailed test case tables
-default_keys = ['inputs', 'input_prompts', 'invalid_input_prompts', 'printed_messages', 'invalid_printed_messages']
-all_keys = default_keys + ADDITIONAL_KEYS
-
-# For each test case, generate the detailed section
-for test_case in test_cases:
-    id_test_case = test_case.get('id_input_test_case')
-    test_case_description = test_case.get('input_test_case_description')
-
-    anchor_id = f"inputtestcase{id_test_case}"
-    output += f'<h3 id="{anchor_id}">Input Test Case {id_test_case} Details - {test_case_description}</h3>\n\n'
-    output += '<table>\n'
-    output += '  <tr>\n'
-    output += '    <th>Requirement</th>\n'
-    output += '    <th>Components</th>\n'
-    output += '  </tr>\n'
-
-    for key in all_keys:
-        # Requirement: key name with underscores replaced by spaces, capitalize each word
-        requirement = ' '.join([word.capitalize() for word in key.replace('_', ' ').split()])
-
-        # Components: individual elements associated with each key
-        components_list = []
-
-        if key in test_case:
-            value = test_case[key]
-            if isinstance(value, dict):
-                if key in ADDITIONAL_KEYS:
-                    # For keys like 'dicts', display only the values
-                    for subkey in value:
-                        subvalue = value[subkey]
-                        # Convert subvalue to JSON string
-                        value_str = json.dumps(subvalue)
-                        components_list.append(value_str)
-                else:
-                    # For other dicts, flatten the dict
-                    for subkey in value:
-                        components_list.append(f'"{subkey}": {value[subkey]}')
-            elif isinstance(value, list):
-                components_list = value
-            else:
-                components_list = [str(value)]
-        else:
-            components_list = []
-
-        # Build the components cell
-        if components_list:
-            components_cell = '<ul>\n'
-            for item in components_list:
-                item = item.strip()
-                components_cell += f'  <li><code>{item}</code></li>\n'
-            components_cell += '</ul>'
-        else:
-            components_cell = ''
-
-        # Add the row to the table
-        output += '  <tr>\n'
-        output += f'    <td>{requirement}</td>\n'
-        output += f'    <td>{components_cell}</td>\n'
-        output += '  </tr>\n'
-
-    output += '</table>\n\n'
-
-    # Include example_output surrounded by triple backticks
-    example_output = test_case.get('example_output', '')
-    if example_output:
-        output += f'<h4>Example Ouput:</h4>\n\n'
-        output += f'```{example_output}\n```\n\n'
-
-# Write the output to a markdown file
-with open(exported_md_file_path, 'w') as f:
-    f.write(output)
-
-print(f"Markdown file {exported_md_file_path} has been generated.")
+print(f"Summary Markdown file has been successfully created at '{output_path}'.")

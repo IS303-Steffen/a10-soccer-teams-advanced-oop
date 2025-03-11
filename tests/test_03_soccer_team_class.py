@@ -27,12 +27,13 @@ def test_03_soccer_team_class(current_test_name, input_test_cases, class_test_ca
 
         # first check if there was an error trying to run the code
         if manager_payload.get('class_results').get('CLASS ERROR') is not None:
-            pytest.fail(f"{exception_message_for_students(
-                exception_data=manager_payload.get('class_results').get('CLASS ERROR'), 
-                input_test_case=input_test_case,
-                current_test_name=current_test_name,
-                )}")
-
+            custom_message = f"{manager_payload.get('class_results').get('CLASS ERROR').get('message')}\n\n"
+            formatted_message = format_error_message(
+                                    custom_message=custom_message, 
+                                    input_test_case=input_test_case,
+                                    current_test_name=current_test_name)
+            pytest.fail(formatted_message)
+            
         class_results_list = manager_payload.get('class_results').get('class_test_cases')
 
         # loop through each class test case

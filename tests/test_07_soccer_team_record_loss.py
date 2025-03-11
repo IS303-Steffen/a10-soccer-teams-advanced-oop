@@ -29,17 +29,19 @@ def test_07_soccer_team_record_loss(current_test_name, input_test_cases, class_t
 
         # first check if there was an error trying to run the code
         if manager_payload.get('class_results').get('CLASS ERROR') is not None:
-            pytest.fail(f"{exception_message_for_students(
-                exception_data=manager_payload.get('class_results').get('CLASS ERROR'), 
-                input_test_case=input_test_case,
-                current_test_name=current_test_name,
-                )}")
+            custom_message = f"{manager_payload.get('class_results').get('CLASS ERROR').get('message')}\n\n"
+            formatted_message = format_error_message(
+                                    custom_message=custom_message, 
+                                    input_test_case=input_test_case,
+                                    current_test_name=current_test_name)
+            pytest.fail(formatted_message)
+
         elif manager_payload.get('class_results').get('FUNCTION ERROR') is not None:
-            pytest.fail(f"{exception_message_for_students(
-                exception_data=manager_payload.get('class_results').get('FUNCTION ERROR').get('FUNCTION ERROR'), 
+            exception_message_for_students(
+                exception_data=manager_payload.get('class_results').get('FUNCTION ERROR').get("FUNCTION ERROR"),
                 input_test_case=input_test_case,
                 current_test_name=current_test_name,
-                )}")
+                )
 
         class_results_list = manager_payload.get('class_results').get('class_test_cases')
 
@@ -50,17 +52,18 @@ def test_07_soccer_team_record_loss(current_test_name, input_test_cases, class_t
             method_results_list = [method_result for method_result in class_result.get('method_test_cases') if method_result.get('function_name') == method_to_test]
             
             if not method_results_list:
-                pytest.fail(f"{exception_message_for_students(ValueError("No method test cases were found. Contact your professor."), input_test_case, current_test_name)}")
-
+                exception_message = exception_message_for_students(ValueError("No method test cases were found. Contact your professor."), input_test_case, current_test_name)
+                pytest.fail(exception_message)
                 
             for method_result in method_results_list:
                 # first check if there were any function errors when running the method:
                 if method_result.get('FUNCTION ERROR') is not None:
-                    pytest.fail(f"{exception_message_for_students(
-                        exception_data=method_result.get('FUNCTION ERROR'), 
-                        input_test_case=input_test_case,
-                        current_test_name=current_test_name,
-                        )}")
+                    exception_message = exception_message_for_students(
+                                            exception_data=method_result.get('FUNCTION ERROR'), 
+                                            input_test_case=input_test_case,
+                                            current_test_name=current_test_name,
+                                            )
+                    pytest.fail(exception_message)
 
                 test_inputs = method_result.get('args')
                 if test_inputs == []:
@@ -135,7 +138,7 @@ def test_07_soccer_team_record_loss(current_test_name, input_test_cases, class_t
                                             f"Double check that you are following the logic provided in the instructions.\n\n"
                                             f"Here are all the variables the test could find in your {class_name} object (ignoring capitalization / punctuation):\n\n"
                                             f"YOUR VARIABLES IN {class_name.upper()}:\n"
-                                            f"{"-"*len("YOUR VARIABLES IN " + class_name + ":")}\n"
+                                            f"{'-'*len('YOUR VARIABLES IN ' + class_name + ':')}\n"
                                             f"{initial_state_vars_str}"),
                             current_test_name=current_test_name,
                             input_test_case=input_test_case,
