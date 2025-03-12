@@ -238,6 +238,7 @@ Total goals scored: <goals scored> Total goals allowed: <goals allowed>
 ```
 For the season record percent part of the string, you should get the value using the method `get_record_percentage` in the `SoccerTeam` class (this is important because you can't directly access `wins` and `losses` in the `SponsoredTeam` class because they are private to the `SoccerTeam` class).
 - `get_record_percentage` must return the total number of wins divided by the total number of games played, rounded to the 2nd decimal.
+  - For example, if a team has won 1 game and played 2 games total, `get_record_percentage` should return the float `.5`. Any formatting you apply to that would be done after in the `get_team_info` method, not in the `get_record_percentage` method.
   - In the case that no games have been played, it should just return 0 (normally if no games have been played, it would raise an error because you can't divide by zero). You'll also want to use the `get_record_percentage` method for the `get_season_message` method described below as well. 
 
 #### `get_season_message`
