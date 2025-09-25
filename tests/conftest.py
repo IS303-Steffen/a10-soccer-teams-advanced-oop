@@ -2063,7 +2063,7 @@ def _class_variants(name: str):
     except Exception:
         return {name, name.lower(), name.replace("_", "").lower()}
 
-def unmangle_and_collapse_keys(d: dict, preferred_class: str | None = None):
+def unmangle_and_collapse_keys(d, preferred_class = None):
     """
     Return a new dict where mangled keys like '_SoccerTeam__wins' and '_SponsoredTeam__wins'
     are both mapped to the logical '__wins' key. If multiple sources map to the same logical key,
