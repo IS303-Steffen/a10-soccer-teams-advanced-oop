@@ -13,9 +13,9 @@ The tests will ignore spacing, capitalization, and punctuation, but you will fai
     </tr>
 </thead>
 <tbody>
-    <tr style="text-align: left">
-        <td>1. Input Prompts</td>
-        <td>
+    <tr>
+        <td style="text-align: left">1. Input Prompts</td>
+        <td style="text-align: left">
         <b>Input test cases used:</b> 1-8<br><br>
         Your input prompts must be the same as the expected input prompts of each input test case. 
         <br>
@@ -24,9 +24,9 @@ The tests will ignore spacing, capitalization, and punctuation, but you will fai
         </td>
         <td>10</td>
     </tr>
-    <tr style="text-align: left">
-        <td>2. Printed Messages</td>
-        <td>
+    <tr>
+        <td style="text-align: left">2. Printed Messages</td>
+        <td style="text-align: left">
         <b>Input test cases used:</b> 1-8<br><br>
         Your printed output must be the same as the expected output of each input test case.
         <br>
@@ -36,91 +36,91 @@ The tests will ignore spacing, capitalization, and punctuation, but you will fai
         </td>
         <td>10</td>
     </tr>
-    <tr>
-        <td>3. SoccerTeam Class</td>
+    <tr >
+        <td style="text-align: left">3. SoccerTeam Class</td>
         <td style="text-align: left">
           This test will create SoccerTeam objects. The object should contain the instance variables listed in the top of this document.
         </td>
         <td>10</td>
     </tr>
     <tr>
-        <td>4. SponsoredTeam Class</td>
+        <td style="text-align: left">4. SponsoredTeam Class</td>
         <td style="text-align: left">
           This test will create SponsoredTeam objects. The object should contain the instance variables listed in the top of this document and inherit from SoccerTeam
         </td>
         <td>10</td>
     </tr>
       <tr>
-        <td>5. Game Class</td>
+        <td style="text-align: left">5. Game Class</td>
         <td style="text-align: left">
           This test will create Game objects. The object should contain the instance variables listed in the top of this document.
         </td>
         <td>10</td>
     </tr>
           <tr>
-        <td>6. SoccerTeam - record win</td>
+        <td style="text-align: left">6. SoccerTeam - record win</td>
         <td style="text-align: left">
           Will test that it correctly adds 1 to a SoccerTeam's wins variable
         </td>
         <td>3</td>
     </tr>
-    <td>7. SoccerTeam - record loss</td>
+    <td style="text-align: left">7. SoccerTeam - record loss</td>
         <td style="text-align: left">
           Will test that it correctly adds 1 to a SoccerTeam's losses variable
         </td>
         <td>3</td>
     </tr>
     <tr>
-       <td>8. SoccerTeam - get record percentage</td>
+       <td style="text-align: left">8. SoccerTeam - get record percentage</td>
         <td style="text-align: left">
           Will test that it returns a correctly calculated percentage rounded to the 2nd decimal.
         </td>
         <td>5</td>
     </tr>
         <tr>
-       <td>9. SoccerTeam - generate score</td>
+       <td style="text-align: left">9. SoccerTeam - generate score</td>
         <td style="text-align: left">
           Will test that it returns an integer between 0 and 3 inclusive.
         </td>
         <td>5</td>
     </tr>
     <tr>
-       <td>10. SoccerTeam - get season message</td>
+       <td style="text-align: left">10. SoccerTeam - get season message</td>
         <td style="text-align: left">
           Will test that it returns the correct message based on the season percentage
         </td>
         <td>5</td>
     </tr>
     <tr>
-       <td>11. SponsoredTeam - generate score</td>
+       <td style="text-align: left">11. SponsoredTeam - generate score</td>
         <td style="text-align: left">
           Will test that it returns an integer between 1 and 3 inclusive
         </td>
         <td>5</td>
     </tr>
     <tr>
-       <td>12. SponsoredTeam - get season message</td>
+       <td style="text-align: left">12. SponsoredTeam - get season message</td>
         <td style="text-align: left">
           Will test that it returns the correct message based on the season percentage (including the sponsor)
         </td>
         <td>5</td>
     </tr>
     <tr>
-       <td>13. Game - play game</td>
+       <td style="text-align: left">13. Game - play game</td>
         <td style="text-align: left">
           Ensures that all relevant instance variables in Game, SoccerTeam/SponsoredTeam are updated when playing a game.
         </td>
         <td>13</td>
     </tr>
     <tr>
-       <td>14. No tie scores</td>
+       <td style="text-align: left">14. No tie scores</td>
         <td style="text-align: left">
           Ensures that your code can't produce tie scores.
         </td>
         <td>5</td>
     </tr>
         <tr>
-        <td>5. Sufficient Comments</td>
+        <td style="text-align: left">15. Sufficient Comments</td>
         <td style="text-align: left">Your code must include at least <code>15</code> comments. You can use any form of commenting:
         <ul>
           <li><code>#</code></li> 

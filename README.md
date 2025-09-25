@@ -1,8 +1,10 @@
 #### Assignment 10
-# Soccer Teams Inheritance
+# Soccer Teams Advanced OOP
 
-This assignment uses some of the logic from the previous Soccer Teams assignment, but adds in these concepts:
-- OOP
+I recommend you watch <a href="https://www.youtube.com/watch?v=qFYZxwxpQFo" target="_blank"> this video </a> of me running through the program. Feel free to watch it on double speed. I think it will help you give you an idea of how the program will flow. You can also reference the .pdf included in the repository as well if you like process diagrams.
+
+For this assignment, you'll use some of the logic from your previous Soccer Teams assignment, but add in these concepts:
+- Advanced OOP
     - association
     - inheritance
     - private variables
@@ -10,10 +12,8 @@ This assignment uses some of the logic from the previous Soccer Teams assignment
 
 Now you'll create `Game` objects that store a home team and away team object. Teams can be regular `SoccerTeam` objects or `SponsoredTeam` objects with modified behavior. Any 2 teams can "play" as many games as they want, all while storing data about the games and teams in their objects. After all games have been played the user can view all the data from any team or any game.
 
-Coding all this requires much more work setting everything up compared to the previous Soccer Teams assignment, but hopefully this assignment demonstrates how storing data inside objects allows for far more complex interactions (imagine storing all this data in individual variables or other data structures)
+Coding all this requires much more work setting everything up compared to the previous Soccer Teams assignment, but hopefully this assignment demonstrates how storing data inside objects allows for far more complex interactions (imagine storing all this data in individual variables or other data structures).
 
-#### Reminder on what to do if you fail a test:
-Remember that if you fail a specific test during a specific input test case, you can see the details of that input test case by going into the `descriptions_of_test_cases` folder. I recommend opening up the file of the input test case you are failing, and then running your code using the exact same set of inputs shown there to help figure out why you might not be passing a test.
 
 ## Libraries Required:
 - `random`
@@ -21,10 +21,10 @@ Remember that if you fail a specific test during a specific input test case, you
     - add `from datetime import date, timedelta` near the top of your code.
 
 ## Classes Required
-I summarize the structure of the classes you'll need to write in the file `Classes_Required.md` to save space in this document. However, I recommend you just start with the "Logical Flow" section of the instructions and create/update your classes as you go, rather than trying to write all your classes before any of the other logic. But do whatever feels natural to you.
+I summarize the structure of the classes you'll need to write in the file `CLASSES_REQUIRED.md` to save space in this document. However, I recommend you just start with the "Logical Flow" section of the instructions and create/update your classes as you go, rather than trying to write all your classes before any of the other logic. But do whatever feels natural to you.
 
-### IMPORTANT:
-Please use the same capitalization case as what is shown in these instructions for all the class names and instance variables, otherwise the automated tests might break. For example, please call your class `SoccerTeam`, NOT `soccerTeam` or `soccer_team`, and name instance variables like  `team_number`, not `teamNumber` or `TeamNumber` etc. I'll try and improve the automated tests in a future semester to account for alternate case namings. Sorry for any annoyance that causes you.
+### Note:
+I recommend using PascalCase for class names and snake_case for variables/methods, but the automated tests should work with any variation of PascalCase, camelCase, or snake_case.
 
 ## Logical Flow:
 For this assignment, you will need to handle improper inputs to receive full credit. You can do it using exception handling or a defensive coding style, whatever you prefer. If you prefer a more defensive style of coding, you might find the `isdecimal()` string method useful to tell whether an input is an integer or not. <a href="https://chatgpt.com/share/6725552e-5bdc-8009-8b23-ab682e98f965" target="_blank">Click here for an example of how it is used.</a>
@@ -54,7 +54,7 @@ For the number of teams that the user enters in the previous section, do the fol
     - `Enter Y if team <team_number> is sponsored, otherwise enter N (or anything else): `
     - Make sure this will work even if the user enters a lower case "y" or enters it with extra spaces. So `"y"`, `" y "`, `" Y"`, and `"Y"` should all work.
 - If the user did NOT enter `"Y"` (or its accepted variations):
-  - Create a `SoccerTeam` object using a team number and the team name that you gathered. You should only need to pass in the team number and team name as arguments when creating the object. Team number should be `1` for the 1st team created, `2` for the 2nd, etc. Also, please spell the class name exactly as `SoccerTeam` or the automated tests may not work. These are all the instance variables that your `SoccerTeam` class should have:
+  - Create a `SoccerTeam` object using a team number and the team name that you gathered. Only pass in the team number and team name as arguments when creating the object. Team number should be `1` for the 1st team created, `2` for the 2nd, etc. These are all the instance variables that your `SoccerTeam` class should have:
     - Instance Variables:
       - `team_number`: (int) the number (1, 2, 3, etc.) of the team.
       - `team_name`: (str) name of the team.
@@ -65,9 +65,9 @@ For the number of teams that the user enters in the previous section, do the fol
 - If the user DID enter `"Y"` (or its accepted variations) then ask:
     - `Enter the name of your sponsor: `
     - Store the sponsor name that is entered.
-    - Create a `SponsoredTeam` object using a team number, team name, and sponsor name as arguments. The `SponsoredTeam` class must inherit from `SoccerTeam`. Also, please spell the class name exactly as `SponsoredTeam` or the automated tests may not work.`SponsoredTeam` objects will have the exact same instance variables as `SoccerTeam`, in addition to an extra instance variable:
+    - Create a `SponsoredTeam` object using a team number, team name, and sponsor name as arguments. The `SponsoredTeam` class must inherit from `SoccerTeam`. `SponsoredTeam` objects will have the exact same instance variables as `SoccerTeam`, in addition to an extra instance variable:
       - `sponsor_name`: (str) the name of the sponsor for the team.
-- Be sure to store your `SoccerTeam` and `SponsoredTeam` objects in a data structure of your choice.
+- Be sure to store your `SoccerTeam` and `SponsoredTeam` objects in a data structure of your choice (dictionary or list).
 
 ### 3.1: Select any 2 teams and create a `Game` object
 Now, you should print out the team number and team name of each team (whether it's a `SoccerTeam` or `SponsoredTeam`) like this:
@@ -104,9 +104,9 @@ In this section, your code must handle:
   - if the user inputs the same team number for the away and the home team, then it should print:
     - `You can't choose the same team as the home and away team! Try again.`
 
-If an invalid input is entered, or the same team is entered twice, it should print one of the corresponding message specified above, and then start over by asking the user to enter the number of the home team.
+If an invalid input is entered, or the same team is entered twice, it should print one of the corresponding message specified above, and then start over by asking the user to enter the number of the HOME TEAM. Always ask for the home team number again, even if the invalid input happened when asking for the away team (if you don't follow that flow, the automated tests won't work correctly).
 
-Then, using the 2 selected team objects, create a `Game` object. When creating a `Game` object, the arguments should include a game number (1 for the 1st game played, 2 for the 2nd game played, etc.), as well as the home team object and away team object. These are all the instance variables that your `Game` class should have:
+Then, using the 2 selected team objects, create a `Game` object. When creating a `Game` object, the arguments must include a game number (1 for the 1st game played, 2 for the 2nd game played, etc.), as well as the home team object and away team object. These are all the instance variables that your `Game` class should have:
 - Instance variables:
     - `game_number`: (int) the number of the game (1, 2, 3, etc.).
     - `game_date`: (date) the date the game was played.
@@ -117,15 +117,19 @@ Then, using the 2 selected team objects, create a `Game` object. When creating a
 - The `game_date` instance variable should be a date from the python standard library `datetime`. The date you use doesn't matter, but it should be a different date for each game. I'd recommend just using something like this:
   - put `from datetime import date, timedelta` at the top (or close to the top) of your python file. This lets you create `date` objects, as well as a `timedelta` that lets you increase or decrease a date by whatever increment you specify.
   - Then, in your `Game` constructor where you make the `game_date` instance variable, you could use code like this:
-    - `self.game_date = date.today() + timedelta(days = self.game_number)`
-    - This code will get today's date and add 1 day to it if its the first game, add 2 days to it if it is the second day, etc.
-
+    ```
+    # put all the other instance variables inside init as well
+    class Game:
+    def __init__(self, game_number, home_team, away_team):
+        self.game_date = date.today() + timedelta(days=game_number)
+    ```
 This `Game` object should then call the `play_game` method.
 
 ### 3.2: `play_game` Method logic
 `play_game` is a method inside the `Game` class that uses the `Game`'s `home_team` and `away_team` instance variables to "play" a soccer game. This method contains most of the same logic from your previous Soccer Teams assignment, but with some differences in how `SponsoredTeam` objects generate their scores.
 1. Generate scores for the home and away team.
-    - Start by generating scores for the home team and the away team using their `generate_score` method, which should appear in both of the `SoccerTeam` and `SponsoredTeam` classes. `generate_score` must just return a random integer between 0 and 3 (inclusive) for `SoccerTeam` objects, or an integer between 1 and 3 (inclusive) for `SponsoredTeam` objects using their overridden version (their sponsorship gives them a big, perhaps unrealistic advantage!)
+    - Start by generating scores for the home team and the away team using their `generate_score` method, which should appear in both of the `SoccerTeam` and `SponsoredTeam` classes.
+    - `generate_score` must just return a random integer between 0 and 3 (inclusive) for `SoccerTeam` objects, or an integer between 1 and 3 (inclusive) for `SponsoredTeam` objects using their overridden version (their sponsorship gives them a big, perhaps unrealistic advantage!)
     - Whether the object is a `SoccerTeam` or a `SponsoredTeam`, the object should call `generate_score`. If you wrote your classes correctly (by using inheritance), the correct version of `generate_score` should be automatically chosen when you call the method.
     - No tie scores are allowed. Either regenerate scores if a tie occurs or code the process in a way that ties cannot occur.
 2. Store the home and away team's scores:
@@ -135,8 +139,11 @@ This `Game` object should then call the `play_game` method.
 4. If the home team score is higher, then record a win for the home team and a loss for the away team and vice versa.
     - You record wins/losses in the `wins` or `losses` instance variables in the `SoccerTeam` / `SponsoredTeam` objects.
     - Remember that you should have made the `wins` and `losses` instance variables have a private scope. Meaning you can't directly access those variables in the `Game` class.
-      - (As for why you would ever do this, you can assume you might want to ensure that you never accidentally increase the wins or losses more than you should).
-    - So, instead of directly changing the variables, you should write 2 methods in the `SoccerTeam` class: `record_win` (which just increases the `wins` variable by 1) and `record_loss` (which just increases the `losses` variable by 1). In this way, you can affect the `wins` and `losses` variables without having direct access to them. Call each of those methods inside the `play_game` method (which one you call for which team depends on whose score was higher)
+      - (As for why you would ever do this, you can assume you might want to ensure that you never accidentally increase the wins or losses more than you should. The point of this is to practice interacting with private variables).
+    - So, instead of directly changing the variables, you should write 2 setter methods in the `SoccerTeam` class:
+      - `record_win` (which just increases the `wins` variable by 1)
+      - `record_loss` (which just increases the `losses` variable by 1)
+    - In this way, you can increase the `wins` and `losses` private variables outside of the `SoccerTeam` class even though you don't have direct access to them. Call each of those methods inside the `play_game` method (which one you call for which team depends on whose score was higher)
 5. Display game status results
     - Finally, call the `Game` method `get_game_status` and print the string it returns. The only thing that `get_game_status` does is return a string. The string should look like:
       - `Results of game <game number> on <game date>: Home team <home team name> scored <home team score> - Away team <away team name> scored <away team score>.`
@@ -146,7 +153,7 @@ This `Game` object should then call the `play_game` method.
 
 ### 3.3: Continue selecting teams for more games
 
-After calling the `play_game` method, The `Game` object that called the method should be stored in a data structure of your choice.
+After calling the `play_game` method, The `Game` object that called the method should be stored in a data structure of your choice (dictionary or list).
 
 Then, begin the process of gathering home and away teams again by printing out the team numbers and team names again, and asking for inputs for the home and away teams, until the user enters `exit`. Note that the user should be able to enter `exit` during either the home team input prompt or the away team input prompt, so make sure it works in either situation.
 - Make sure that it stops asking for inputs/playing games no matter how `exit` is capitalized, and if there are leading or trailing spaces. For example `" EXIT "` should work the same as `"exit"`
@@ -237,7 +244,7 @@ Season record: <wins> - <losses> (<season record percent>%)
 Total goals scored: <goals scored> Total goals allowed: <goals allowed>
 ```
 For the season record percent part of the string, you should get the value using the method `get_record_percentage` in the `SoccerTeam` class (this is important because you can't directly access `wins` and `losses` in the `SponsoredTeam` class because they are private to the `SoccerTeam` class).
-- `get_record_percentage` must return the total number of wins divided by the total number of games played, rounded to the 2nd decimal.
+- `get_record_percentage` must return a float of the total number of wins divided by the total number of games played, rounded to the 2nd decimal.
   - For example, if a team has won 1 game and played 2 games total, `get_record_percentage` should return the float `.5`. Any formatting you apply to that would be done after in the `get_team_info` method, not in the `get_record_percentage` method.
   - In the case that no games have been played, it should just return 0 (normally if no games have been played, it would raise an error because you can't divide by zero). You'll also want to use the `get_record_percentage` method for the `get_season_message` method described below as well. 
 
@@ -290,8 +297,14 @@ Enter a game number to see its info, or enter "exit" to go back to the Postseaso
     
 The user should be able to view the info for any Game or Team as many times as they want until they enter "exit" in the Postseason menu.
 
-## Grading Rubric
-See the Rubric.md file. Remember to right click and select "Open Preview" to see it formatted so it is readable.
+## Rubric
+Note that because this assignment depends on random number generation, some of the tests take a few seconds longer to run because they are running many times to test out many different number generation possibilities.
+
+- See `RUBRIC.md` for details on each of the tests you're scored on.
+- To see what score you'll receive, run the tests using the testing tab (it looks like a beaker).
+    - In the testing tab, press `Configure Python Tests`, then choose `pytest`, then `tests`, and then press the `Run Tests` button.
+        - If you accidentally choose the wrong options for `Configure Python Tests`, to choose again, go to `View` > `Command Palette` and then type `Python: Configure Tests` and hit enter. Then choose the options above again.
+- To see your results and any error messages, right click the `TEST_RESULTS_SUMMARY.md` file and choose `Open Preview`.
 
 
 ## Example Output
@@ -423,6 +436,8 @@ exit: End the program
 Enter an option: exit
 Exiting the program.
 ```
+### Example Output 2
+
 Here's a similar example, but with entering invalid inputs at each step to show off the error handling:
 
 ```

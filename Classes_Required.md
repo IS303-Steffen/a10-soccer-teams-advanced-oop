@@ -1,8 +1,8 @@
 
 ## Classes Required:
 
-### IMPORTANT:
-Please use the same capitalization case as what is shown in these instructions for all the class names and variables, otherwise the automated tests might break. For example, please call your class `SoccerTeam`, NOT `soccerTeam` or `soccer_team`, etc. I'll try and improve the automated tests in a future semester to account for alternate spellings. Sorry for any annoyance that causes you.
+### Note:
+I recommend using PascalCase for class names and snake_case for variables/methods, but the automated tests should work with any variation of PascalCase, camelCase, or snake_case.
 
 #### `SoccerTeam`
 - Instance Variables:

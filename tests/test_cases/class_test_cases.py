@@ -75,7 +75,7 @@ soccer_team_record_win = MethodTestCase(
     args=[],
     expected_return_value=None,
     expected_object_update={
-        '_SoccerTeam__wins':{
+        '__wins':{
             'initial_value': 0,
             'final_value': 1
         }
@@ -87,7 +87,7 @@ soccer_team_record_loss = MethodTestCase(
     args=[],
     expected_return_value=None,
     expected_object_update={
-        '_SoccerTeam__losses':{
+        '__losses':{
             'initial_value': 0,
             'final_value': 1
         }
@@ -107,8 +107,8 @@ soccer_team_get_record_percentage_67_percent = MethodTestCase(
     expected_return_value=0.67,
     expected_object_update=None,
     set_var_values={
-        '_SoccerTeam__wins': 2,
-        '_SoccerTeam__losses': 1,
+        '__wins': 2,
+        '__losses': 1,
     }
 )
 
@@ -127,8 +127,8 @@ soccer_team_get_season_low = MethodTestCase(
     expected_return_value='Your team needs to practice!',
     expected_object_update=None,
     set_var_values={
-        '_SoccerTeam__wins': 0,
-        '_SoccerTeam__losses': 4,
+        '__wins': 0,
+        '__losses': 4,
     },
     num_calls=1
 )
@@ -139,8 +139,8 @@ soccer_team_get_season_mid = MethodTestCase(
     expected_return_value='You had a good season.',
     expected_object_update=None,
     set_var_values={
-        '_SoccerTeam__wins': 2,
-        '_SoccerTeam__losses': 2,
+        '__wins': 2,
+        '__losses': 2,
     },
     num_calls=1
 )
@@ -151,8 +151,8 @@ soccer_team_get_season_high = MethodTestCase(
     expected_return_value='Qualified for the NCAA Soccer Tournament!',
     expected_object_update=None,
     set_var_values={
-        '_SoccerTeam__wins': 6,
-        '_SoccerTeam__losses': 2,
+        '__wins': 6,
+        '__losses': 2,
     },
     num_calls=1
 )
@@ -172,8 +172,8 @@ sponsored_team_get_season_low = MethodTestCase(
     expected_return_value='Your team needs to practice! You are in danger of Cosmo dropping you.',
     expected_object_update=None,
     set_var_values={
-        '_SoccerTeam__wins': 0,
-        '_SoccerTeam__losses': 4,
+        '__wins': 0,
+        '__losses': 4,
     },
     num_calls=1
 )
@@ -184,8 +184,8 @@ sponsored_team_get_season_mid = MethodTestCase(
     expected_return_value='You had a good season. Cosmo hopes you can do better.',
     expected_object_update=None,
     set_var_values={
-        '_SoccerTeam__wins': 2,
-        '_SoccerTeam__losses': 2,
+        '__wins': 2,
+        '__losses': 2,
     },
     num_calls=1
 )
@@ -196,8 +196,8 @@ sponsored_team_get_season_high = MethodTestCase(
     expected_return_value='Qualified for the NCAA Soccer Tournament! Cosmo is very happy.',
     expected_object_update=None,
     set_var_values={
-        '_SoccerTeam__wins': 6,
-        '_SoccerTeam__losses': 2,
+        '__wins': 6,
+        '__losses': 2,
     },
     num_calls=1
 )
@@ -223,8 +223,8 @@ UVU_soccer_team = ClassTestCase(
     init_expected_values={
         'team_number': 1,
         'team_name': 'UVU',
-        '_SoccerTeam__wins': 0,
-        '_SoccerTeam__losses': 0,
+        '__wins': 0,
+        '__losses': 0,
         'goals_scored': 0,
         'goals_allowed': 0
     },
@@ -251,8 +251,8 @@ BYU_sponsored_team = ClassTestCase(
         'team_number': 2,
         'team_name': 'BYU',
         'sponsor_name': 'Cosmo',
-        '_SoccerTeam__wins': 0,
-        '_SoccerTeam__losses': 0,
+        '__wins': 0,
+        '__losses': 0,
         'goals_scored': 0,
         'goals_allowed': 0
     },
@@ -274,8 +274,8 @@ game_1 = ClassTestCase(
     init_expected_values={
         'game_number': 1,
         'game_date': date.today() + timedelta(days=1),
-        'home_team': {'team_number': 1, 'team_name': 'UVU', '_SoccerTeam__wins': 0, '_SoccerTeam__losses': 0, 'goals_scored': 0, 'goals_allowed': 0},
-        'away_team': {'team_number': 2, 'team_name': 'BYU', 'sponsor_name': 'Cosmo', '_SoccerTeam__wins': 0, '_SoccerTeam__losses': 0, 'goals_scored': 0, 'goals_allowed': 0},
+        'home_team': {'team_number': 1, 'team_name': 'UVU', '__wins': 0, '__losses': 0, 'goals_scored': 0, 'goals_allowed': 0},
+        'away_team': {'team_number': 2, 'team_name': 'BYU', 'sponsor_name': 'Cosmo', '__wins': 0, '__losses': 0, 'goals_scored': 0, 'goals_allowed': 0},
         'home_team_score': 0,
         'away_team_score': 0
     },
