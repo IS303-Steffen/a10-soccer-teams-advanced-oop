@@ -1158,6 +1158,8 @@ def test_functions(function_tests, globals_dict, instance=None):
     Tests functions or methods based on the provided test cases.
     If 'instance' is provided, tests methods of the instance.
     """
+    class MissingVarError(AssertionError):
+        pass
     function_results = {}
     is_method_test = False
 
@@ -1248,8 +1250,7 @@ def test_functions(function_tests, globals_dict, instance=None):
                                 available = list(getattr(instance, "__dict__", {}).keys())
                                 available_str = '\n'.join([grab_from_double_underscore(var) for var in available])
                                 missing_str = '\n'.join(missing)
-                                class MissingVarError(AssertionError):
-                                    pass
+
                                 raise MissingVarError(
                                     f"### Missing variable(s):\n"
                                     f"The test could not find the following expected instance variable(s) in the object:\n"
