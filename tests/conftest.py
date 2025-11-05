@@ -1557,18 +1557,22 @@ def get_object_state(obj):
     Recursively serializes any nested objects stored as instance variables.
     """
     def serialize(value):
-        if is_picklable(value):
-            return value  # Directly picklable objects are returned as-is
-        elif hasattr(value, '__dict__'):  # If value is a custom object, recurse
+        # 1) Always normalize custom objects (student classes) to a dict shape
+        if hasattr(value, '__dict__'):
             return get_object_state(value)
-        elif isinstance(value, list):  # Handle lists of objects
+
+        # 2) Then handle containers
+        if isinstance(value, list):
             return [serialize(item) for item in value]
-        elif isinstance(value, dict):  # Handle dictionaries of objects
+        if isinstance(value, dict):
             return {k: serialize(v) for k, v in value.items()}
-        elif isinstance(value, tuple):  # Handle tuples of objects
+        if isinstance(value, tuple):
             return tuple(serialize(item) for item in value)
-        else:
-            return str(value)  # Fallback to string representation if unpicklable
+
+        # 3) Finally, primitives/other values: keep if picklable, else string fallback
+        if is_picklable(value):
+            return value
+        return str(value)
 
     # Get instance variables and recursively serialize them
     instance_variables = {name: serialize(value) for name, value in vars(obj).items()}
